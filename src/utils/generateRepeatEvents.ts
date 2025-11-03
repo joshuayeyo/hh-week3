@@ -1,12 +1,15 @@
-import { EventForm } from '../types';
 import { formatDate } from './dateUtils';
+
+import { EventForm } from '@/types/events/EventForm.types';
 
 // ! TEST CASE
 export const generateRepeatEvents = (eventData: EventForm): EventForm[] => {
   const events: EventForm[] = [];
   const maxEndDate = new Date('2025-12-30');
   const startDate = new Date(eventData.date);
-  const endDate = eventData.repeat.endDate ? new Date(eventData.repeat.endDate) : maxEndDate;
+  const endDate = eventData.repeat.endDate
+    ? new Date(eventData.repeat.endDate)
+    : maxEndDate;
 
   const originalDay = startDate.getDate();
   const originalMonth = startDate.getMonth();
@@ -26,18 +29,22 @@ export const generateRepeatEvents = (eventData: EventForm): EventForm[] => {
     switch (eventData.repeat.type) {
       case 'daily':
         currentDate = new Date(
-          currentDate.getTime() + eventData.repeat.interval * 24 * 60 * 60 * 1000
+          currentDate.getTime() +
+            eventData.repeat.interval * 24 * 60 * 60 * 1000
         );
         break;
 
       case 'weekly':
         currentDate = new Date(
-          currentDate.getTime() + eventData.repeat.interval * 7 * 24 * 60 * 60 * 1000
+          currentDate.getTime() +
+            eventData.repeat.interval * 7 * 24 * 60 * 60 * 1000
         );
         break;
 
       case 'monthly': {
-        currentDate.setMonth(currentDate.getMonth() + eventData.repeat.interval);
+        currentDate.setMonth(
+          currentDate.getMonth() + eventData.repeat.interval
+        );
         currentDate.setDate(originalDay);
 
         if (currentDate.getDate() !== originalDay) {
@@ -51,13 +58,18 @@ export const generateRepeatEvents = (eventData: EventForm): EventForm[] => {
         if (originalMonth === 1 && originalDay === 29) {
           currentDate.setFullYear(currentDate.getFullYear() + 4);
         } else {
-          currentDate.setFullYear(currentDate.getFullYear() + eventData.repeat.interval);
+          currentDate.setFullYear(
+            currentDate.getFullYear() + eventData.repeat.interval
+          );
         }
 
         currentDate.setMonth(originalMonth);
         currentDate.setDate(originalDay);
 
-        if (currentDate.getMonth() !== originalMonth || currentDate.getDate() !== originalDay) {
+        if (
+          currentDate.getMonth() !== originalMonth ||
+          currentDate.getDate() !== originalDay
+        ) {
           currentDate.setMonth(0);
           currentDate.setDate(1);
           currentDate.setFullYear(currentDate.getFullYear() + 1);
