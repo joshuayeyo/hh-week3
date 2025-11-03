@@ -1,6 +1,6 @@
 /* global RequestInit */
 
-import { Event } from '../types';
+import { Event } from '@/types/events/Event.types';
 
 /**
  * API endpoints for recurring event operations
@@ -58,7 +58,8 @@ export const useRecurringEventOperations = (
 
     // Find ALL events that are part of the same recurring series
     const seriesEvents = events.filter(
-      (event) => isRecurringEvent(event) && isSameRecurringSeries(event, targetEvent)
+      (event) =>
+        isRecurringEvent(event) && isSameRecurringSeries(event, targetEvent)
     );
 
     // If there's only one event in the series (just the target event itself), return empty array
@@ -69,7 +70,11 @@ export const useRecurringEventOperations = (
   /**
    * Generic API request handler with error handling
    */
-  const makeApiRequest = async (url: string, method: string, body?: unknown): Promise<boolean> => {
+  const makeApiRequest = async (
+    url: string,
+    method: string,
+    body?: unknown
+  ): Promise<boolean> => {
     try {
       const config: RequestInit = { method };
 
@@ -87,15 +92,27 @@ export const useRecurringEventOperations = (
   };
 
   const updateEventOnServer = async (event: Event): Promise<boolean> => {
-    return makeApiRequest(`${API_ENDPOINTS.events}/${event.id}`, HTTP_METHODS.PUT, event);
+    return makeApiRequest(
+      `${API_ENDPOINTS.events}/${event.id}`,
+      HTTP_METHODS.PUT,
+      event
+    );
   };
 
   const deleteEventOnServer = async (eventId: string): Promise<boolean> => {
-    return makeApiRequest(`${API_ENDPOINTS.events}/${eventId}`, HTTP_METHODS.DELETE);
+    return makeApiRequest(
+      `${API_ENDPOINTS.events}/${eventId}`,
+      HTTP_METHODS.DELETE
+    );
   };
 
-  const deleteRecurringEventOnServer = async (repeatId: string): Promise<boolean> => {
-    return makeApiRequest(`${API_ENDPOINTS.recurringEvents}/${repeatId}`, HTTP_METHODS.DELETE);
+  const deleteRecurringEventOnServer = async (
+    repeatId: string
+  ): Promise<boolean> => {
+    return makeApiRequest(
+      `${API_ENDPOINTS.recurringEvents}/${repeatId}`,
+      HTTP_METHODS.DELETE
+    );
   };
 
   const updateRecurringEventOnServer = async (
@@ -135,7 +152,9 @@ export const useRecurringEventOperations = (
       return await updateRecurringEventOnServer(repeatId, updateData);
     } else {
       const results = await Promise.all(
-        relatedEvents.map((event) => updateEventOnServer({ ...event, title: updatedEvent.title }))
+        relatedEvents.map((event) =>
+          updateEventOnServer({ ...event, title: updatedEvent.title })
+        )
       );
       return results.every((result) => result);
     }
@@ -209,14 +228,20 @@ export const useRecurringEventOperations = (
     const relatedEvents = findRelatedRecurringEvents(eventToDelete);
 
     if (relatedEvents.length === 0) {
-      await executeDeleteAndRefresh(() => deleteEventOnServer(eventToDelete.id));
+      await executeDeleteAndRefresh(() =>
+        deleteEventOnServer(eventToDelete.id)
+      );
       return;
     }
 
     if (deleteSingleOnly) {
-      await executeDeleteAndRefresh(() => deleteEventOnServer(eventToDelete.id));
+      await executeDeleteAndRefresh(() =>
+        deleteEventOnServer(eventToDelete.id)
+      );
     } else {
-      await executeDeleteAndRefresh(() => deleteRecurringSeries(eventToDelete, relatedEvents));
+      await executeDeleteAndRefresh(() =>
+        deleteRecurringSeries(eventToDelete, relatedEvents)
+      );
     }
   };
 

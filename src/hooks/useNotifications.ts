@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { Event } from '../types';
-import { createNotificationMessage, getUpcomingEvents } from '../utils/notificationUtils';
+import { Event } from '@/types/events/Event.types';
+import {
+  createNotificationMessage,
+  getUpcomingEvents,
+} from '@/utils/notificationUtils';
 
 export const useNotifications = (events: Event[]) => {
-  const [notifications, setNotifications] = useState<{ id: string; message: string }[]>([]);
+  const [notifications, setNotifications] = useState<
+    { id: string; message: string }[]
+  >([]);
   const [notifiedEvents, setNotifiedEvents] = useState<string[]>([]);
 
   const checkUpcomingEvents = () => {
@@ -19,7 +24,10 @@ export const useNotifications = (events: Event[]) => {
       })),
     ]);
 
-    setNotifiedEvents((prev) => [...prev, ...upcomingEvents.map(({ id }) => id)]);
+    setNotifiedEvents((prev) => [
+      ...prev,
+      ...upcomingEvents.map(({ id }) => id),
+    ]);
   };
 
   const removeNotification = (index: number) => {
@@ -31,5 +39,10 @@ export const useNotifications = (events: Event[]) => {
     return () => clearInterval(interval);
   }, [events, notifiedEvents]);
 
-  return { notifications, notifiedEvents, setNotifications, removeNotification };
+  return {
+    notifications,
+    notifiedEvents,
+    setNotifications,
+    removeNotification,
+  };
 };

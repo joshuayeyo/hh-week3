@@ -1,7 +1,8 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Event, RepeatType } from '../types';
-import { getTimeErrorMessage } from '../utils/timeValidation';
+import { Event } from '@/types/events/Event.types';
+import { RepeatType } from '@/types/repeats/RepeatType.types';
+import { getTimeErrorMessage } from '@/utils/timeValidation';
 
 type TimeErrorRecord = Record<'startTimeError' | 'endTimeError', string | null>;
 
@@ -10,23 +11,34 @@ export const useEventForm = (initialEvent?: Event) => {
   const [date, setDate] = useState(initialEvent?.date || '');
   const [startTime, setStartTime] = useState(initialEvent?.startTime || '');
   const [endTime, setEndTime] = useState(initialEvent?.endTime || '');
-  const [description, setDescription] = useState(initialEvent?.description || '');
+  const [description, setDescription] = useState(
+    initialEvent?.description || ''
+  );
   const [location, setLocation] = useState(initialEvent?.location || '');
   const [category, setCategory] = useState(initialEvent?.category || '업무');
   const [isRepeating, setIsRepeating] = useState(
     !!initialEvent?.repeat.type && initialEvent.repeat.type !== 'none'
   );
-  const [repeatType, setRepeatType] = useState<RepeatType>(initialEvent?.repeat.type || 'none');
-  const [repeatInterval, setRepeatInterval] = useState(initialEvent?.repeat.interval || 1);
-  const [repeatEndDate, setRepeatEndDate] = useState(initialEvent?.repeat.endDate || '');
-  const [notificationTime, setNotificationTime] = useState(initialEvent?.notificationTime || 10);
+  const [repeatType, setRepeatType] = useState<RepeatType>(
+    initialEvent?.repeat.type || 'none'
+  );
+  const [repeatInterval, setRepeatInterval] = useState(
+    initialEvent?.repeat.interval || 1
+  );
+  const [repeatEndDate, setRepeatEndDate] = useState(
+    initialEvent?.repeat.endDate || ''
+  );
+  const [notificationTime, setNotificationTime] = useState(
+    initialEvent?.notificationTime || 10
+  );
 
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
-  const [{ startTimeError, endTimeError }, setTimeError] = useState<TimeErrorRecord>({
-    startTimeError: null,
-    endTimeError: null,
-  });
+  const [{ startTimeError, endTimeError }, setTimeError] =
+    useState<TimeErrorRecord>({
+      startTimeError: null,
+      endTimeError: null,
+    });
 
   const handleStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newStartTime = e.target.value;

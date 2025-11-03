@@ -1,8 +1,9 @@
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
-import { Event, EventForm } from '../types';
-import { generateRepeatEvents } from '../utils/generateRepeatEvents';
+import { Event } from '@/types/events/Event.types';
+import { EventForm } from '@/types/events/EventForm.types';
+import { generateRepeatEvents } from '@/utils/generateRepeatEvents';
 
 // 에러 메시지 상수
 const ERROR_MESSAGES = {
@@ -70,9 +71,12 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
 
       await fetchEvents();
       onSave?.();
-      enqueueSnackbar(editing ? SUCCESS_MESSAGES.EVENT_UPDATED : SUCCESS_MESSAGES.EVENT_ADDED, {
-        variant: 'success',
-      });
+      enqueueSnackbar(
+        editing ? SUCCESS_MESSAGES.EVENT_UPDATED : SUCCESS_MESSAGES.EVENT_ADDED,
+        {
+          variant: 'success',
+        }
+      );
     } catch (error) {
       console.error('Error saving event:', error);
       enqueueSnackbar(ERROR_MESSAGES.SAVE_FAILED, { variant: 'error' });
