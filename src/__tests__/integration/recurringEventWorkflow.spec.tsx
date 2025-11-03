@@ -114,7 +114,11 @@ describe('반복 일정 워크플로우 통합 테스트', () => {
     const editButtons = await screen.findAllByLabelText('Edit event');
     await user.click(editButtons[0]);
 
-    await screen.findByText('해당 일정만 수정하시겠어요?', {}, { timeout: 3000 });
+    await screen.findByText(
+      '해당 일정만 수정하시겠어요?',
+      {},
+      { timeout: 3000 }
+    );
     const yesButton = await screen.findByText('예');
     await user.click(yesButton);
 
@@ -167,7 +171,11 @@ describe('반복 일정 워크플로우 통합 테스트', () => {
     await user.click(editButtons[0]);
 
     // 다이얼로그가 나타나는지 확인
-    await screen.findByText('해당 일정만 수정하시겠어요?', {}, { timeout: 3000 });
+    await screen.findByText(
+      '해당 일정만 수정하시겠어요?',
+      {},
+      { timeout: 3000 }
+    );
 
     const noButton = await screen.findByText('아니오');
     await user.click(noButton);
@@ -227,7 +235,9 @@ describe('반복 일정 워크플로우 통합 테스트', () => {
 
       // 반복 일정 삭제 다이얼로그가 나타나는지 확인
       expect(screen.getByText('반복 일정 삭제')).toBeInTheDocument();
-      expect(screen.getByText('해당 일정만 삭제하시겠어요?')).toBeInTheDocument();
+      expect(
+        screen.getByText('해당 일정만 삭제하시겠어요?')
+      ).toBeInTheDocument();
     });
 
     it('삭제 다이얼로그에서 예를 선택하면 해당 일정만 삭제된다', async () => {
@@ -271,7 +281,11 @@ describe('반복 일정 워크플로우 통합 테스트', () => {
       const deleteButtons = await screen.findAllByLabelText('Delete event');
       await user.click(deleteButtons[0]);
 
-      await screen.findByText('해당 일정만 삭제하시겠어요?', {}, { timeout: 3000 });
+      await screen.findByText(
+        '해당 일정만 삭제하시겠어요?',
+        {},
+        { timeout: 3000 }
+      );
 
       // "예" 버튼 선택 (단일 삭제)
       const yesButton = await screen.findByText('예');
@@ -322,7 +336,11 @@ describe('반복 일정 워크플로우 통합 테스트', () => {
       const deleteButtons = await screen.findAllByLabelText('Delete event');
       await user.click(deleteButtons[0]);
 
-      await screen.findByText('해당 일정만 삭제하시겠어요?', {}, { timeout: 3000 });
+      await screen.findByText(
+        '해당 일정만 삭제하시겠어요?',
+        {},
+        { timeout: 3000 }
+      );
 
       // "아니오" 버튼 선택 (전체 삭제)
       const noButton = await screen.findByText('아니오');
@@ -372,7 +390,11 @@ describe('반복 일정 워크플로우 통합 테스트', () => {
       const deleteButtons = await screen.findAllByLabelText('Delete event');
       await user.click(deleteButtons[0]);
 
-      await screen.findByText('해당 일정만 삭제하시겠어요?', {}, { timeout: 3000 });
+      await screen.findByText(
+        '해당 일정만 삭제하시겠어요?',
+        {},
+        { timeout: 3000 }
+      );
 
       // 취소 버튼 클릭
       const cancelButton = await screen.findByText('취소');

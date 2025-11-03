@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react';
-import { renderHook, act } from '@testing-library/react';
+import { act, render, renderHook, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
-import RecurringEventDialog from '../../components/RecurringEventDialog';
-import { useRecurringEventOperations } from '../../hooks/useRecurringEventOperations';
-import { Event } from '../../types';
+import RecurringEventDialog from '@/components/RecurringEventDialog';
+import { useRecurringEventOperations } from '@/hooks/useRecurringEventOperations';
+import { Event } from '@/types/events/Event.types';
 
 const mockEvent: Event = {
   id: '1',
@@ -97,7 +96,9 @@ describe('반복 일정 엣지 케이스', () => {
 
       const mockUpdateEvents = vi.fn();
 
-      const { result } = renderHook(() => useRecurringEventOperations([], mockUpdateEvents));
+      const { result } = renderHook(() =>
+        useRecurringEventOperations([], mockUpdateEvents)
+      );
 
       await act(async () => {
         await result.current.handleRecurringEdit(mockEvent, false);
@@ -113,7 +114,9 @@ describe('반복 일정 엣지 케이스', () => {
       const mockUpdateEvents = vi.fn();
       const events = [mockEvent];
 
-      const { result } = renderHook(() => useRecurringEventOperations(events, mockUpdateEvents));
+      const { result } = renderHook(() =>
+        useRecurringEventOperations(events, mockUpdateEvents)
+      );
 
       const nonExistentEvent: Event = {
         ...mockEvent,
@@ -139,7 +142,8 @@ describe('반복 일정 엣지 케이스', () => {
         useRecurringEventOperations([incompleteEvent], mockUpdateEvents)
       );
 
-      const relatedEvents = result.current.findRelatedRecurringEvents(incompleteEvent);
+      const relatedEvents =
+        result.current.findRelatedRecurringEvents(incompleteEvent);
 
       expect(relatedEvents).toHaveLength(0); // interval이 0이므로 반복 일정으로 간주하지 않음
     });
@@ -168,9 +172,13 @@ describe('반복 일정 엣지 케이스', () => {
         },
       ];
 
-      const { result } = renderHook(() => useRecurringEventOperations(events, mockUpdateEvents));
+      const { result } = renderHook(() =>
+        useRecurringEventOperations(events, mockUpdateEvents)
+      );
 
-      const relatedEvents = result.current.findRelatedRecurringEvents(events[0]);
+      const relatedEvents = result.current.findRelatedRecurringEvents(
+        events[0]
+      );
 
       // 같은 제목, 시간, 반복 설정을 가진 이벤트만 반환
       expect(relatedEvents).toHaveLength(2);
@@ -185,12 +193,20 @@ describe('반복 일정 엣지 케이스', () => {
         { ...mockEvent, id: '3', repeat: { type: 'yearly', interval: 1 } },
       ];
 
-      const { result } = renderHook(() => useRecurringEventOperations(events, mockUpdateEvents));
+      const { result } = renderHook(() =>
+        useRecurringEventOperations(events, mockUpdateEvents)
+      );
 
       // 각각 다른 반복 유형이므로 관련 이벤트 없음
-      expect(result.current.findRelatedRecurringEvents(events[0])).toHaveLength(0);
-      expect(result.current.findRelatedRecurringEvents(events[1])).toHaveLength(0);
-      expect(result.current.findRelatedRecurringEvents(events[2])).toHaveLength(0);
+      expect(result.current.findRelatedRecurringEvents(events[0])).toHaveLength(
+        0
+      );
+      expect(result.current.findRelatedRecurringEvents(events[1])).toHaveLength(
+        0
+      );
+      expect(result.current.findRelatedRecurringEvents(events[2])).toHaveLength(
+        0
+      );
     });
   });
 
@@ -202,9 +218,13 @@ describe('반복 일정 엣지 케이스', () => {
         { ...mockEvent, id: '2', date: '2025-11-01' },
       ];
 
-      const { result } = renderHook(() => useRecurringEventOperations(events, mockUpdateEvents));
+      const { result } = renderHook(() =>
+        useRecurringEventOperations(events, mockUpdateEvents)
+      );
 
-      const relatedEvents = result.current.findRelatedRecurringEvents(events[0]);
+      const relatedEvents = result.current.findRelatedRecurringEvents(
+        events[0]
+      );
 
       expect(relatedEvents).toHaveLength(2);
     });
@@ -216,9 +236,13 @@ describe('반복 일정 엣지 케이스', () => {
         { ...mockEvent, id: '2', date: '2024-03-01' },
       ];
 
-      const { result } = renderHook(() => useRecurringEventOperations(events, mockUpdateEvents));
+      const { result } = renderHook(() =>
+        useRecurringEventOperations(events, mockUpdateEvents)
+      );
 
-      const relatedEvents = result.current.findRelatedRecurringEvents(events[0]);
+      const relatedEvents = result.current.findRelatedRecurringEvents(
+        events[0]
+      );
 
       expect(relatedEvents).toHaveLength(2);
     });

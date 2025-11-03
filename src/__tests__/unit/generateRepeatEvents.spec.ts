@@ -1,5 +1,5 @@
-import { Event } from '../../types';
-import { generateRepeatEvents } from '../../utils/generateRepeatEvents';
+import { Event } from '@/types/events/Event.types';
+import { generateRepeatEvents } from '@/utils/generateRepeatEvents';
 
 describe('제약 조건', () => {
   it('반복 없는 이벤트는 단일 이벤트로 배열에 담겨 반환된다', () => {
@@ -40,7 +40,11 @@ describe('일간 반복 테스트', () => {
       notificationTime: 15,
     };
     const result = generateRepeatEvents(event);
-    expect(result.map((e) => e.date)).toEqual(['2024-01-01', '2024-01-02', '2024-01-03']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-01-01',
+      '2024-01-02',
+      '2024-01-03',
+    ]);
   });
 
   it("'2024-01-01'부터 '2024-01-05'까지 2일 간격으로 반복하는 경우 '2024-01-01', '2024-01-03', '2024-01-05'가 된다", () => {
@@ -61,7 +65,11 @@ describe('일간 반복 테스트', () => {
       notificationTime: 15,
     };
     const result = generateRepeatEvents(event);
-    expect(result.map((e) => e.date)).toEqual(['2024-01-01', '2024-01-03', '2024-01-05']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-01-01',
+      '2024-01-03',
+      '2024-01-05',
+    ]);
   });
 });
 
@@ -86,7 +94,11 @@ describe('주간 반복 테스트', () => {
 
     const result = generateRepeatEvents(event);
 
-    expect(result.map((e) => e.date)).toEqual(['2024-01-01', '2024-01-08', '2024-01-15']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-01-01',
+      '2024-01-08',
+      '2024-01-15',
+    ]);
   });
 
   it("'2024-01-01'를 기준으로 2주 간격으로 생성하는 경우 '2024-01-01', '2024-01-15', '2024-01-29'가 된다", () => {
@@ -109,7 +121,11 @@ describe('주간 반복 테스트', () => {
 
     const result = generateRepeatEvents(event);
 
-    expect(result.map((e) => e.date)).toEqual(['2024-01-01', '2024-01-15', '2024-01-29']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-01-01',
+      '2024-01-15',
+      '2024-01-29',
+    ]);
   });
 });
 
@@ -134,7 +150,11 @@ describe('월간 반복 테스트', () => {
 
     const result = generateRepeatEvents(event);
 
-    expect(result.map((e) => e.date)).toEqual(['2024-01-15', '2024-02-15', '2024-03-15']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-01-15',
+      '2024-02-15',
+      '2024-03-15',
+    ]);
   });
 
   it('2024-01-15를 기준으로 2024-05-15까지 2달 반복되는 이벤트의 날짜는 "2024-01-15", "2024-03-15", "2024-05-25"이다', () => {
@@ -156,7 +176,11 @@ describe('월간 반복 테스트', () => {
     };
 
     const result = generateRepeatEvents(event);
-    expect(result.map((e) => e.date)).toEqual(['2024-01-15', '2024-03-15', '2024-05-15']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-01-15',
+      '2024-03-15',
+      '2024-05-15',
+    ]);
   });
 
   it('24년 1월 31일을 기준으로 2024-04-30까지 매월 반복하는 경우 "2024-01-31", "2024-03-31"가 된다', () => {
@@ -204,7 +228,11 @@ describe('연간 반복 테스트', () => {
 
     const result = generateRepeatEvents(event);
 
-    expect(result.map((e) => e.date)).toEqual(['2024-03-15', '2025-03-15', '2026-03-15']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-03-15',
+      '2025-03-15',
+      '2026-03-15',
+    ]);
   });
 
   it('2년 간격으로 반복되는 이벤트를 정확히 생성해야 함', () => {
@@ -228,7 +256,11 @@ describe('연간 반복 테스트', () => {
     const result = generateRepeatEvents(event);
 
     expect(result).toHaveLength(3);
-    expect(result.map((e) => e.date)).toEqual(['2024-03-15', '2026-03-15', '2028-03-15']);
+    expect(result.map((e) => e.date)).toEqual([
+      '2024-03-15',
+      '2026-03-15',
+      '2028-03-15',
+    ]);
   });
 
   it('윤년 날짜 처리를 정확히 해야 함', () => {

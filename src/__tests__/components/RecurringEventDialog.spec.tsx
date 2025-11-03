@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
-import RecurringEventDialog from '../../components/RecurringEventDialog';
-import { Event } from '../../types';
+import RecurringEventDialog from '@/components/RecurringEventDialog';
+import { Event } from '@/types/events/Event.types';
 
 const mockEvent: Event = {
   id: '1',
@@ -30,7 +30,9 @@ describe('RecurringEventDialog', () => {
       render(<RecurringEventDialog {...mockProps} />);
 
       expect(screen.getByText('반복 일정 수정')).toBeInTheDocument();
-      expect(screen.getByText('해당 일정만 수정하시겠어요?')).toBeInTheDocument();
+      expect(
+        screen.getByText('해당 일정만 수정하시겠어요?')
+      ).toBeInTheDocument();
     });
 
     it('수정 모드에서 예/아니오 버튼이 표시된다', () => {
@@ -91,7 +93,9 @@ describe('RecurringEventDialog', () => {
       render(<RecurringEventDialog {...mockDeleteProps} />);
 
       expect(screen.getByText('반복 일정 삭제')).toBeInTheDocument();
-      expect(screen.getByText('해당 일정만 삭제하시겠어요?')).toBeInTheDocument();
+      expect(
+        screen.getByText('해당 일정만 삭제하시겠어요?')
+      ).toBeInTheDocument();
     });
 
     it('삭제 모드에서 예/아니오 버튼이 표시된다', () => {
@@ -106,7 +110,9 @@ describe('RecurringEventDialog', () => {
       const user = userEvent.setup();
       const mockOnConfirm = vi.fn();
 
-      render(<RecurringEventDialog {...mockDeleteProps} onConfirm={mockOnConfirm} />);
+      render(
+        <RecurringEventDialog {...mockDeleteProps} onConfirm={mockOnConfirm} />
+      );
 
       await user.click(screen.getByText('예'));
 
@@ -117,7 +123,9 @@ describe('RecurringEventDialog', () => {
       const user = userEvent.setup();
       const mockOnConfirm = vi.fn();
 
-      render(<RecurringEventDialog {...mockDeleteProps} onConfirm={mockOnConfirm} />);
+      render(
+        <RecurringEventDialog {...mockDeleteProps} onConfirm={mockOnConfirm} />
+      );
 
       await user.click(screen.getByText('아니오'));
 
@@ -128,7 +136,9 @@ describe('RecurringEventDialog', () => {
       const user = userEvent.setup();
       const mockOnClose = vi.fn();
 
-      render(<RecurringEventDialog {...mockDeleteProps} onClose={mockOnClose} />);
+      render(
+        <RecurringEventDialog {...mockDeleteProps} onClose={mockOnClose} />
+      );
 
       await user.click(screen.getByText('취소'));
 

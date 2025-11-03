@@ -41,7 +41,9 @@ describe('useRecurringEventOperations', () => {
   });
 
   it('예(단일 수정)를 선택하면 해당 일정만 업데이트하고 반복을 제거한다', async () => {
-    const { result } = renderHook(() => useRecurringEventOperations(mockEvents, mockUpdateEvents));
+    const { result } = renderHook(() =>
+      useRecurringEventOperations(mockEvents, mockUpdateEvents)
+    );
 
     const updatedEvent: Event = {
       ...mockEvents[0],
@@ -56,14 +58,19 @@ describe('useRecurringEventOperations', () => {
     expect(fetch).toHaveBeenCalledWith('/api/events/1', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...updatedEvent, repeat: { type: 'none', interval: 0 } }),
+      body: JSON.stringify({
+        ...updatedEvent,
+        repeat: { type: 'none', interval: 0 },
+      }),
     });
 
     expect(mockUpdateEvents).toHaveBeenCalledWith([]);
   });
 
   it('아니오(전체 수정)를 선택하면 모든 반복 일정을 업데이트한다', async () => {
-    const { result } = renderHook(() => useRecurringEventOperations(mockEvents, mockUpdateEvents));
+    const { result } = renderHook(() =>
+      useRecurringEventOperations(mockEvents, mockUpdateEvents)
+    );
 
     const updatedEvent: Event = {
       ...mockEvents[0],
@@ -121,9 +128,13 @@ describe('useRecurringEventOperations', () => {
   });
 
   it('관련 반복 일정을 올바르게 찾는다', () => {
-    const { result } = renderHook(() => useRecurringEventOperations(mockEvents, mockUpdateEvents));
+    const { result } = renderHook(() =>
+      useRecurringEventOperations(mockEvents, mockUpdateEvents)
+    );
 
-    const relatedEvents = result.current.findRelatedRecurringEvents(mockEvents[0]);
+    const relatedEvents = result.current.findRelatedRecurringEvents(
+      mockEvents[0]
+    );
 
     expect(relatedEvents).toHaveLength(2);
     expect(relatedEvents).toContain(mockEvents[0]);
@@ -142,7 +153,9 @@ describe('useRecurringEventOperations', () => {
       useRecurringEventOperations(nonRecurringEvents, mockUpdateEvents)
     );
 
-    const relatedEvents = result.current.findRelatedRecurringEvents(nonRecurringEvents[0]);
+    const relatedEvents = result.current.findRelatedRecurringEvents(
+      nonRecurringEvents[0]
+    );
 
     expect(relatedEvents).toHaveLength(0);
   });
@@ -154,7 +167,9 @@ describe('useRecurringEventOperations', () => {
       useRecurringEventOperations(singleRecurringEvent, mockUpdateEvents)
     );
 
-    const relatedEvents = result.current.findRelatedRecurringEvents(singleRecurringEvent[0]);
+    const relatedEvents = result.current.findRelatedRecurringEvents(
+      singleRecurringEvent[0]
+    );
 
     expect(relatedEvents).toHaveLength(0);
   });
@@ -284,7 +299,10 @@ describe('useRecurringEventOperations', () => {
       );
 
       await act(async () => {
-        await result.current.handleRecurringDelete(singleRecurringEvent[0], false);
+        await result.current.handleRecurringDelete(
+          singleRecurringEvent[0],
+          false
+        );
       });
 
       // Even though deleteSingleOnly=false, should only delete one event
