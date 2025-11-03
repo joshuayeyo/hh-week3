@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
-import { server } from '../setupTests';
-import { Event } from '../types';
+import { server } from '@/setupTests';
+import { Event } from '@/types/events/Event.types';
 
 // ! Hard 여기 제공 안함
 export const setupMockHandlerCreation = (initEvents = [] as Event[]) => {
@@ -114,7 +114,9 @@ export const setupMockHandlerListCreation = (initEvents = [] as Event[]) => {
   );
 };
 
-export const setupMockHandlerRecurringListDelete = (initEvents = [] as Event[]) => {
+export const setupMockHandlerRecurringListDelete = (
+  initEvents = [] as Event[]
+) => {
   let mockEvents: Event[] = [...initEvents];
 
   server.use(
@@ -130,7 +132,9 @@ export const setupMockHandlerRecurringListDelete = (initEvents = [] as Event[]) 
     }),
     http.delete('/api/recurring-events/:repeatId', async ({ params }) => {
       const { repeatId } = params;
-      const remainingEvents = mockEvents.filter((event) => event.repeat.id !== repeatId);
+      const remainingEvents = mockEvents.filter(
+        (event) => event.repeat.id !== repeatId
+      );
 
       mockEvents = remainingEvents;
       return HttpResponse.json(remainingEvents, { status: 201 });
@@ -138,7 +142,9 @@ export const setupMockHandlerRecurringListDelete = (initEvents = [] as Event[]) 
   );
 };
 
-export const setupMockHandlerRecurringListUpdate = (initEvents = [] as Event[]) => {
+export const setupMockHandlerRecurringListUpdate = (
+  initEvents = [] as Event[]
+) => {
   let mockEvents: Event[] = [...initEvents];
 
   server.use(
@@ -165,8 +171,11 @@ export const setupMockHandlerRecurringListUpdate = (initEvents = [] as Event[]) 
             description: updateData.description || event.description,
             location: updateData.location || event.location,
             category: updateData.category || event.category,
-            notificationTime: updateData.notificationTime || event.notificationTime,
-            repeat: updateData.repeat ? { ...event.repeat, ...updateData.repeat } : event.repeat,
+            notificationTime:
+              updateData.notificationTime || event.notificationTime,
+            repeat: updateData.repeat
+              ? { ...event.repeat, ...updateData.repeat }
+              : event.repeat,
           };
         }
         return event;
