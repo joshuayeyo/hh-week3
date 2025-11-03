@@ -318,7 +318,14 @@ export const formatEventDate = (event: Event): string => {
 };
 
 // ✅ Good - Proper error handling
+<<<<<<< HEAD
 export const validateEventTime = (startTime: string, endTime: string): boolean => {
+=======
+export const validateEventTime = (
+  startTime: string,
+  endTime: string
+): boolean => {
+>>>>>>> 5f797b8 (Docs: Add project documentation and templates)
   if (!startTime || !endTime) {
     throw new Error('Start time and end time are required');
   }
@@ -356,9 +363,7 @@ export const EventCard = ({ event, onClick }: EventCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Typography variant="h6">{event.title}</Typography>
-      <Typography variant="body2">
-        {formatEventDate(event)}
-      </Typography>
+      <Typography variant="body2">{formatEventDate(event)}</Typography>
     </Box>
   );
 };
