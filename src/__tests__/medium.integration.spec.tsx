@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { render, screen, within, act } from '@testing-library/react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { act, render, screen, within } from '@testing-library/react';
 import { UserEvent, userEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { SnackbarProvider } from 'notistack';
@@ -9,12 +9,13 @@ import { ReactElement } from 'react';
 import {
   setupMockHandlerCreation,
   setupMockHandlerDeletion,
-  setupMockHandlerUpdating,
   setupMockHandlerListCreation,
-} from '../__mocks__/handlersUtils';
-import App from '../App';
-import { server } from '../setupTests';
-import { Event, RepeatInfo } from '../types';
+  setupMockHandlerUpdating,
+} from '@/__mocks__/handlersUtils';
+import App from '@/App';
+import { server } from '@/setupTests';
+import { Event } from '@/types/events/Event.types';
+import { RepeatInfo } from '@/types/repeats/RepeatInfo.types';
 
 const theme = createTheme();
 
@@ -36,9 +37,20 @@ const setup = (element: ReactElement) => {
 // ! Hard 여기 제공 안함
 const saveSchedule = async (
   user: UserEvent,
-  form: Omit<Event, 'id' | 'notificationTime' | 'repeat'> & { repeat?: RepeatInfo }
+  form: Omit<Event, 'id' | 'notificationTime' | 'repeat'> & {
+    repeat?: RepeatInfo;
+  }
 ) => {
-  const { title, date, startTime, endTime, location, description, category, repeat } = form;
+  const {
+    title,
+    date,
+    startTime,
+    endTime,
+    location,
+    description,
+    category,
+    repeat,
+  } = form;
 
   await user.click(screen.getAllByText('일정 추가')[0]);
 
@@ -49,15 +61,24 @@ const saveSchedule = async (
   await user.type(screen.getByLabelText('설명'), description);
   await user.type(screen.getByLabelText('위치'), location);
   await user.click(screen.getByLabelText('카테고리'));
-  await user.click(within(screen.getByLabelText('카테고리')).getByRole('combobox'));
+  await user.click(
+    within(screen.getByLabelText('카테고리')).getByRole('combobox')
+  );
   await user.click(screen.getByRole('option', { name: `${category}-option` }));
 
   if (repeat) {
     await user.click(screen.getByLabelText('반복 일정'));
-    await user.click(within(screen.getByLabelText('반복 유형')).getByRole('combobox'));
-    await user.click(screen.getByRole('option', { name: `${repeat.type}-option` }));
+    await user.click(
+      within(screen.getByLabelText('반복 유형')).getByRole('combobox')
+    );
+    await user.click(
+      screen.getByRole('option', { name: `${repeat.type}-option` })
+    );
     await user.clear(screen.getByLabelText('반복 간격'));
-    await user.type(screen.getByLabelText('반복 간격'), String(repeat.interval));
+    await user.type(
+      screen.getByLabelText('반복 간격'),
+      String(repeat.interval)
+    );
     if (repeat.endDate) {
       await user.type(screen.getByLabelText('반복 종료일'), repeat.endDate!);
     }
@@ -130,7 +151,9 @@ describe('일정 뷰', () => {
     // ! 현재 시스템 시간 2025-10-01
     const { user } = setup(<App />);
 
-    await user.click(within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox'));
+    await user.click(
+      within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox')
+    );
     await user.click(screen.getByRole('option', { name: 'week-option' }));
 
     // ! 일정 로딩 완료 후 테스트
@@ -154,7 +177,9 @@ describe('일정 뷰', () => {
       category: '업무',
     });
 
-    await user.click(within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox'));
+    await user.click(
+      within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox')
+    );
     await user.click(screen.getByRole('option', { name: 'week-option' }));
 
     const weekView = within(screen.getByTestId('week-view'));
@@ -311,7 +336,9 @@ describe('일정 충돌', () => {
 
     expect(screen.getByText('일정 겹침 경고')).toBeInTheDocument();
     expect(screen.getByText(/다음 일정과 겹칩니다/)).toBeInTheDocument();
-    expect(screen.getByText('기존 회의 (2025-10-15 09:00-10:00)')).toBeInTheDocument();
+    expect(
+      screen.getByText('기존 회의 (2025-10-15 09:00-10:00)')
+    ).toBeInTheDocument();
   });
 
   it('기존 일정의 시간을 수정하여 충돌이 발생하면 경고가 노출된다', async () => {
@@ -332,7 +359,9 @@ describe('일정 충돌', () => {
 
     expect(screen.getByText('일정 겹침 경고')).toBeInTheDocument();
     expect(screen.getByText(/다음 일정과 겹칩니다/)).toBeInTheDocument();
-    expect(screen.getByText('기존 회의 (2025-10-15 09:00-10:00)')).toBeInTheDocument();
+    expect(
+      screen.getByText('기존 회의 (2025-10-15 09:00-10:00)')
+    ).toBeInTheDocument();
   });
 });
 
@@ -344,13 +373,17 @@ it('notificationTime을 10으로 하면 지정 시간 10분 전 알람 텍스트
   // ! 일정 로딩 완료 후 테스트
   await screen.findByText('일정 로딩 완료!');
 
-  expect(screen.queryByText('10분 후 기존 회의 일정이 시작됩니다.')).not.toBeInTheDocument();
+  expect(
+    screen.queryByText('10분 후 기존 회의 일정이 시작됩니다.')
+  ).not.toBeInTheDocument();
 
   act(() => {
     vi.advanceTimersByTime(1000);
   });
 
-  expect(screen.getByText('10분 후 기존 회의 일정이 시작됩니다.')).toBeInTheDocument();
+  expect(
+    screen.getByText('10분 후 기존 회의 일정이 시작됩니다.')
+  ).toBeInTheDocument();
 });
 
 // ! 새로 추가된 테스트
@@ -372,7 +405,9 @@ it('입력한 새로운 반복 일정 정보에 맞춰 모든 필드가 이벤�
   });
 
   const eventList = within(screen.getByTestId('event-list'));
-  expect(eventList.getAllByText('반복: 2일마다 (종료: 2025-10-17)')).toHaveLength(2);
+  expect(
+    eventList.getAllByText('반복: 2일마다 (종료: 2025-10-17)')
+  ).toHaveLength(2);
   expect(eventList.getByText('2025-10-15')).toBeInTheDocument();
   expect(eventList.getByText('2025-10-17')).toBeInTheDocument();
 });
@@ -396,7 +431,9 @@ it('새로 추가한 반복 일정을 수정하는 경우 반복 일정에 관�
   const { user } = setup(<App />);
 
   const eventList = within(screen.getByTestId('event-list'));
-  expect(await eventList.findByText('반복: 2일마다 (종료: 2025-10-17)')).toBeInTheDocument();
+  expect(
+    await eventList.findByText('반복: 2일마다 (종료: 2025-10-17)')
+  ).toBeInTheDocument();
 
   await user.click(await screen.findByLabelText('Edit event'));
 
@@ -420,7 +457,9 @@ it('새로 추가한 반복 일정을 수정하는 경우 반복 일정에 관�
 
   await user.click(screen.getByTestId('event-submit-button'));
 
-  expect(eventList.queryByText('반복: 2일마다 (종료: 2025-10-17)')).not.toBeInTheDocument();
+  expect(
+    eventList.queryByText('반복: 2일마다 (종료: 2025-10-17)')
+  ).not.toBeInTheDocument();
 });
 
 it('반복 일정을 수정하는 경우 반복 유형 관련 입력 폼이 사라진다', async () => {
@@ -472,7 +511,9 @@ it('주별 뷰 선택 후 해당 주에 반복 일정이 존재한다면 해당 
     repeat: { type: 'daily', interval: 2, endDate: '2025-10-03' },
   });
 
-  await user.click(within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox'));
+  await user.click(
+    within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox')
+  );
   await user.click(screen.getByRole('option', { name: 'week-option' }));
 
   const weekView = within(screen.getByTestId('week-view'));

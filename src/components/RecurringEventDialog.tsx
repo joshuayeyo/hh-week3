@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Event } from '../types';
+import { Event } from '@/types/events/Event.types';
 
 /**
  * Available operation modes for the recurring event dialog
@@ -91,20 +91,32 @@ const RecurringEventDialog = ({
       aria-labelledby="recurring-event-dialog-title"
       aria-describedby="recurring-event-dialog-description"
     >
-      <DialogTitle id="recurring-event-dialog-title">{config.title}</DialogTitle>
+      <DialogTitle id="recurring-event-dialog-title">
+        {config.title}
+      </DialogTitle>
 
       <DialogContent>
-        <Typography id="recurring-event-dialog-description">{config.message}</Typography>
+        <Typography id="recurring-event-dialog-description">
+          {config.message}
+        </Typography>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose} color="inherit">
           {BUTTON_TEXT.cancel}
         </Button>
-        <Button onClick={handleSeriesOperation} variant="outlined" color="primary">
+        <Button
+          onClick={handleSeriesOperation}
+          variant="outlined"
+          color="primary"
+        >
           {BUTTON_TEXT.no}
         </Button>
-        <Button onClick={handleSingleOperation} variant="contained" color="primary">
+        <Button
+          onClick={handleSingleOperation}
+          variant="contained"
+          color="primary"
+        >
           {BUTTON_TEXT.yes}
         </Button>
       </DialogActions>

@@ -12,7 +12,14 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '.storybook/**', '**/playwright-report/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      'build/**',
+      'coverage/**',
+      '.storybook/**',
+      '**/playwright-report/**',
+    ],
   },
   // Base configuration for all files
   {
@@ -73,6 +80,7 @@ export default [
 
       // ESLint rules
       'no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
 
       // React rules
       'react/prop-types': 'off',

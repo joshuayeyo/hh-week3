@@ -125,7 +125,9 @@ describe('반복 일정 회귀 테스트', () => {
       await screen.findByText('일정 로딩 완료!');
 
       // 주별 뷰로 변경
-      await user.click(within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox'));
+      await user.click(
+        within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox')
+      );
       await user.click(screen.getByRole('option', { name: 'week-option' }));
 
       const weekView = within(screen.getByTestId('week-view'));
@@ -214,11 +216,15 @@ describe('반복 일정 회귀 테스트', () => {
       setup(<App />);
       await screen.findByText('일정 로딩 완료!');
 
-      expect(screen.queryByText('10분 후 반복 회의 일정이 시작됩니다.')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('10분 후 반복 회의 일정이 시작됩니다.')
+      ).not.toBeInTheDocument();
 
       // 1초 후 알림 확인
       vi.advanceTimersByTime(1000);
-      expect(await screen.findByText('10분 후 반복 회의 일정이 시작됩니다.')).toBeInTheDocument();
+      expect(
+        await screen.findByText('10분 후 반복 회의 일정이 시작됩니다.')
+      ).toBeInTheDocument();
     });
   });
 
@@ -252,11 +258,15 @@ describe('반복 일정 회귀 테스트', () => {
       await user.type(screen.getByLabelText('설명'), '반복 일정');
       await user.type(screen.getByLabelText('위치'), '회의실 B');
       await user.click(screen.getByLabelText('카테고리'));
-      await user.click(within(screen.getByLabelText('카테고리')).getByRole('combobox'));
+      await user.click(
+        within(screen.getByLabelText('카테고리')).getByRole('combobox')
+      );
       await user.click(screen.getByRole('option', { name: '업무-option' }));
 
       await user.click(screen.getByLabelText('반복 일정'));
-      await user.click(within(screen.getByLabelText('반복 유형')).getByRole('combobox'));
+      await user.click(
+        within(screen.getByLabelText('반복 유형')).getByRole('combobox')
+      );
       await user.click(screen.getByRole('option', { name: 'daily-option' }));
 
       await user.click(screen.getByTestId('event-submit-button'));
