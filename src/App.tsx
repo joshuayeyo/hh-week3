@@ -56,7 +56,9 @@ import {
 import { findOverlappingEvents } from './utils/eventOverlap.ts';
 import { getTimeErrorMessage } from './utils/timeValidation.ts';
 
-import { Event, EventForm, RepeatType } from '@/types/events/Event.types.ts';
+import { Event } from '@/types/events/Event.types.ts';
+import { EventForm } from '@/types/events/EventForm.types.ts';
+import { RepeatType } from '@/types/repeats/RepeatType.types.ts';
 
 const categories = ['업무', '개인', '가족', '기타'];
 
